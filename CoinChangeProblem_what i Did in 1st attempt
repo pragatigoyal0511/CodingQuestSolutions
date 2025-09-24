@@ -1,0 +1,94 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+
+        if(amount ==0)
+        
+        {
+            return 0;
+        }
+
+
+        //add the coins in set so as to check in o(1) if the remainder wala coin directly exists
+        Set<Integer> denominationSet = new HashSet<>();
+        for(int i=0; i< coins.length; i++)
+        {
+            denominationSet.add(coins[i]);
+        }
+
+
+        //declare variable for min coins reqd;
+        int count=0;
+
+
+        //sort the coins array
+         Arrays.sort(coins);
+
+        int target = amount;
+        //search the position just smaller than the target value in sorted array using binary search
+         int start=0;
+         int end=coins.length -1;
+        while( target >=0 )
+        {
+           
+            int pos = binarysearchJustSmallerThanTarget(coins, start, end, target);
+            if(pos == -1)
+            {
+                return -1;
+            }
+
+
+            //divide target with coins[i] -> so that we get the maximum no of c
+            //coins with bigger value denomination
+            int quotient=0;
+            int remainder=0;
+            
+             quotient = target/coins[pos];
+             count = count + quotient;
+             remainder = target % coins[pos];
+
+             //check in set if the remainder value denomination exists
+             if(denominationSet.contains(remainder))
+             {
+                count = count+1;
+                return count;
+             }
+             else{
+                target = remainder;
+                start = 0;
+                end = pos - 1;
+             }
+
+        }
+
+        if(target == 0)
+        {
+            return count;
+        }
+        
+        return -1;
+    }
+
+
+    int binarysearchJustSmallerThanTarget(int[] coins, int start, int end, int target)
+    {
+        int mid=-1;
+        int ans=-1;
+        while(start <= end)
+        {
+             mid = (start+end)/2;
+
+            if(coins[mid] == target)
+            {
+                return mid;
+            }else if (target > coins[mid])
+            {
+                ans = mid;      // coins[mid] is a candidate (smaller than target)
+                start = mid+1;
+            }else{
+                end = mid-1;
+            }
+        }
+
+        return ans;
+    }
+}
