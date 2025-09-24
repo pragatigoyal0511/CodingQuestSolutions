@@ -1,3 +1,5 @@
+https://leetcode.com/problems/coin-change/
+
 class Solution {
     public int coinChange(int[] coins, int amount) {
 
@@ -31,6 +33,7 @@ class Solution {
         {
            
             int pos = binarysearchJustSmallerThanTarget(coins, start, end, target);
+            //System.out.println("position "+pos);
             if(pos == -1)
             {
                 return -1;
@@ -44,10 +47,18 @@ class Solution {
             
              quotient = target/coins[pos];
              count = count + quotient;
+             //System.out.println("count "+count);
              remainder = target % coins[pos];
 
+             //System.out.println("remainder "+remainder);
+
+
              //check in set if the remainder value denomination exists
-             if(denominationSet.contains(remainder))
+             if(remainder == 0)
+             {
+                return count;
+             }
+             else if(denominationSet.contains(remainder))
              {
                 count = count+1;
                 return count;
